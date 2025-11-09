@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EasyBook • Prototype (Cycle 0)</title>
+  <style>
+    :root{
+      --bg:#0f172a; /* slate-900 */
+      --card:#111827; /* gray-900 */
+      --ink:#e5e7eb; /* gray-200 */
+      --muted:#94a3b8; /* slate-400 */
+      --brand:#22c55e; /* green-500 */
+      --brand-2:#38bdf8; /* sky-400 */
+      --danger:#ef4444;
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#0b1220,#0f172a);color:var(--ink);font:16px/1.4 system-ui,-apple-system,Segoe UI,Roboto;min-height:100vh;display:flex;}
+    .wrap{max-width:980px;margin:auto;padding:32px;flex:1}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+    header .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));box-shadow:var(--shadow)}
+    h1{font-size:1.4rem;margin:0}
+    .card{background:rgba(17,24,39,.8);border:1px solid rgba(148,163,184,.15);border-radius:16px;box-shadow:var(--shadow)}
+    .grid{display:grid;grid-template-columns:1fr 340px;gap:22px}
+    @media (max-width:900px){.grid{grid-template-columns:1fr}}
+    .main{padding:20px}
+    .aside{padding:20px;border-left:1px dashed rgba(148,163,184,.25)}
+    @media (max-width:900px){.aside{border-left:0;border-top:1px dashed rgba(148,163,184,.25)}}
+    .stepper{display:flex;gap:12px;flex-wrap:wrap;margin:6px 0 18px}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(148,163,184,.25);color:var(--muted)}
+    .chip.active{border-color:var(--brand);color:#fff}
+    .chip .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+    .chip.active .dot{background:var(--brand)}
+    label{display:block;margin:14px 0 6px;color:#cbd5e1}
+    input,select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(148,163,184,.25);background:#0b1220;color:#e2e8f0}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .btns{display:flex;justify-content:space-between;margin-top:18px}
+    button{padding:12px 16px;border-radius:12px;border:0;cursor:pointer}
+    .primary{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0b1220;font-weight:700}
+    .ghost{background:transparent;border:1px solid rgba(148,163,184,.35);color:var(--ink)}
+    .price{font-size:2rem;font-weight:800;margin:0}
+    .muted{color:var(--muted)}
+    .notice{margin-top:8px;color:#fca5a5;font-size:.9rem;display:none}
+    .show{display:block}
+    .review-item{display:flex;justify-content:space-between;margin:6px 0;color:#cbd5e1}
+    .divider{height:1px;background:rgba(148,163,184,.2);margin:12px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>EasyBook — Online Booking (Prototype)</h1>
+        <div class="muted">Cycle 0 mock-up • Not real data • Keyboard-friendly</div>
+      </div>
+    </header>
+
+    <section class="card grid" aria-label="Booking flow">
+      <div class="main">
+        <nav class="stepper" aria-label="Steps">
+          <div class="chip active" data-step="0"><span class="dot"></span><span>1. Select</span></div>
+          <div class="chip" data-step="1"><span class="dot"></span><span>2. Details</span></div>
+          <div class="chip" data-step="2"><span class="dot"></span><span>3. Payment</span></div>
+          <div class="chip" data-step="3"><span class="dot"></span><span>4. Review</span></div>
+        </nav>
+
+        <!-- Selection -->
+        <form id="step-0" autocomplete="on">
+          <label for="service">What are you booking?</label>
+          <select id="service" required>
+            <option value="">Choose…</option>
+            <option value="concert">Concert: City Chamber Night</option>
+            <option value="clinic">Clinic: Wellness Check</option>
+            <option value="tour">Museum Tour</option>
+          </select>
+          <div id="service-msg" class="notice">Please choose an option.</div>
+          
+          <div class="row">
+            <div>
+              <label for="date">Date</label>
+              <input type="date" id="date" required />
+              <div id="date-msg" class="notice">Please pick a date.</div>
+            </div>
+            <div>
+              <label for="time">Time</label>
+              <select id="time" required>
+                <option value="">Select…</option>
+                <option>09:00 AM</option>
+                <option>01:00 PM</option>
+                <option>06:30 PM</option>
+              </select>
+              <div id="time-msg" class="notice">Please choose a time.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="qty">Tickets / Slots</label>
+              <select id="qty">
+                <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+              </select>
+            </div>
+            <div>
+              <label for="tier">Seat / Tier</label>
+              <select id="tier">
+                <option value="std">Standard</option>
+                <option value="prem">Premium (+$15)</option>
+                <option value="vip">VIP (+$40)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="btns">
+            <span></span>
+            <button type="button" class="primary" id="to-1">Next: Details →</button>
+          </div>
+        </form>
+
+        <!-- Details -->
+        <form id="step-1" hidden>
+          <label for="name">Full name</label>
+          <input id="name" placeholder="First Last" required />
+          <div id="name-msg" class="notice">Please enter your name.</div>
+
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" required />
+          <div id="email-msg" class="notice">Enter a valid email.</div>
+
+          <label for="notes">Accessibility or notes (optional)</label>
+          <input id="notes" placeholder="Wheelchair seating, ASL interpreter, etc." />
+
+          <div class="btns">
+            <button type="button" class="ghost" id="back-0">← Back</button>
+            <button type="button" class="primary" id="to-2">Next: Payment →</button>
+          </div>
+        </form>
+
+        <!-- Payment -->
+        <form id="step-2" hidden>
+          <label for="card">Card number</label>
+          <input id="card" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" required />
+          <div id="card-msg" class="notice">Card number looks short.</div>
+
+          <div class="row">
+            <div>
+              <label for="exp">Expiry</label>
+              <input id="exp" placeholder="MM/YY" maxlength="5" />
+            </div>
+            <div>
+              <label for="cvv">CVV</label>
+              <input id="cvv" placeholder="123" maxlength="4" />
+            </div>
+          </div>
+
+          <div class="btns">
+            <button type="button" class="ghost" id="back-1">← Back</button>
+            <button type="button" class="primary" id="to-3">Review →</button>
+          </div>
+        </form>
+
+        <!-- Review -->
+        <div id="step-3" hidden>
+          <h2>Review & Confirm</h2>
+          <div class="review-item"><span>Service</span><strong id="r-service">—</strong></div>
+          <div class="review-item"><span>Date</span><strong id="r-date">—</strong></div>
+          <div class="review-item"><span>Time</span><strong id="r-time">—</strong></div>
+          <div class="review-item"><span>Quantity</span><strong id="r-qty">—</strong></div>
+          <div class="review-item"><span>Tier</span><strong id="r-tier">—</strong></div>
+          <div class="divider"></div>
+          <div class="review-item"><span>Total</span><strong id="r-total">$0.00</strong></div>
+
+          <div class="btns">
+            <button type="button" class="ghost" id="back-2">← Back</button>
+            <button type="button" class="primary" id="confirm">Confirm Booking ✓</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="aside" aria-label="Order summary">
+        <h3 style="margin-top:0">Summary</h3>
+        <p class="muted">Your selections update the price in real time.</p>
+        <p class="price" id="live-total">$0.00</p>
+        <div class="divider"></div>
+        <div class="review-item"><span>Service</span><span id="s-service">—</span></div>
+        <div class="review-item"><span>Date</span><span id="s-date">—</span></div>
+        <div class="review-item"><span>Time</span><span id="s-time">—</span></div>
+        <div class="review-item"><span>Qty</span><span id="s-qty">1</span></div>
+        <div class="review-item"><span>Tier</span><span id="s-tier">Standard</span></div>
+        <div class="divider"></div>
+        <small class="muted">This is a non-transactional prototype — no data is stored.</small>
+      </aside>
+    </section>
+
+  </div>
+
+<script>
+  // Simple state + pricing
+  const state = {
+    service:"", date:"", time:"", qty:1, tier:"std", name:"", email:"",
+  };
+  const basePrice = { concert: 35, clinic: 25, tour: 18 };
+  const tierAdd = { std: 0, prem: 15, vip: 40 };
+
+  const el = id => document.getElementById(id);
+  const chips = document.querySelectorAll('.chip');
+  function setStep(n){
+    // toggle forms
+    for(let i=0;i<4;i++){
+      const f = el('step-'+i);
+      if(!f) continue;
+      f.hidden = i!==n;
+      chips[i].classList.toggle('active', i===n);
+    }
+  }
+
+  // Inputs
+  const service = el('service');
+  const date = el('date');
+  const time = el('time');
+  const qty = el('qty');
+  const tier = el('tier');
+
+  function money(n){return `$${n.toFixed(2)}`}
+  function compute(){
+    const base = basePrice[state.service] || 0;
+    const add = tierAdd[state.tier] || 0;
+    const total = (base + add) * Number(state.qty || 1);
+    el('live-total').textContent = money(total);
+    return total;
+  }
+  function syncSummary(){
+    el('s-service').textContent = service.options[service.selectedIndex]?.text || '—';
+    el('s-date').textContent = state.date || '—';
+    el('s-time').textContent = state.time || '—';
+    el('s-qty').textContent = state.qty;
+    el('s-tier').textContent = tier.options[tier.selectedIndex]?.text || 'Standard';
+  }
+  function update(){
+    state.service = service.value; state.date = date.value; state.time = time.value; state.qty = qty.value; state.tier = tier.value;
+    compute(); syncSummary();
+  }
+  [service,date,time,qty,tier].forEach(c=>c.addEventListener('change', update));
+  update();
+
+  // Step navigation with tiny validations
+  el('to-1').addEventListener('click', ()=>{
+    let ok=true;
+    if(!service.value){ ok=false; el('service-msg').classList.add('show'); } else { el('service-msg').classList.remove('show'); }
+    if(!date.value){ ok=false; el('date-msg').classList.add('show'); } else { el('date-msg').classList.remove('show'); }
+    if(!time.value){ ok=false; el('time-msg').classList.add('show'); } else { el('time-msg').classList.remove('show'); }
+    if(ok) setStep(1);
+  });
+  el('back-0').addEventListener('click', ()=> setStep(0));
+
+  el('to-2').addEventListener('click', ()=>{
+    const name = el('name'); const email = el('email');
+    let ok = true;
+    if(!name.value){ ok=false; el('name-msg').classList.add('show'); } else { el('name-msg').classList.remove('show'); }
+    if(!email.value || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value)) { ok=false; el('email-msg').classList.add('show'); } else { el('email-msg').classList.remove('show'); }
+    if(ok){ state.name = name.value; state.email = email.value; setStep(2); }
+  });
+  el('back-1').addEventListener('click', ()=> setStep(1));
+
+  el('to-3').addEventListener('click', ()=>{
+    const card = el('card');
+    if(card.value.replace(/\s/g,'').length < 12){ el('card-msg').classList.add('show'); return; }
+    el('card-msg').classList.remove('show');
+    // fill review
+    el('r-service').textContent = service.options[service.selectedIndex]?.text;
+    el('r-date').textContent = date.value; el('r-time').textContent = time.value;
+    el('r-qty').textContent = qty.value; el('r-tier').textContent = tier.options[tier.selectedIndex]?.text;
+    el('r-total').textContent = el('live-total').textContent;
+    setStep(3);
+  });
+  el('back-2').addEventListener('click', ()=> setStep(2));
+
+  el('confirm').addEventListener('click', ()=>{
+    alert('✅ Booking confirmed (prototype). Thanks!');
+  });
+</script>
+</body>
+</html>
