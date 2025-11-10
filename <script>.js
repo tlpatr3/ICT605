@@ -3,7 +3,7 @@
   const state = {
     service:"", date:"", time:"", qty:1, tier:"std", name:"", email:"",
   };
-  const basePrice = { concert: 35, clinic: 25, tour: 18 };
+  const basePrice = { concert: 35, ballet: 25, tour: 18 };
   const tierAdd = { std: 0, prem: 15, vip: 40 };
 
   const el = id => document.getElementById(id);
@@ -47,7 +47,7 @@
   [service,date,time,qty,tier].forEach(c=>c.addEventListener('change', update));
   update();
 
-  // Step navigation with tiny validations
+  
   el('to-1').addEventListener('click', ()=>{
     let ok=true;
     if(!service.value){ ok=false; el('service-msg').classList.add('show'); } else { el('service-msg').classList.remove('show'); }

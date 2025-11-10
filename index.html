@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EasyBook • Prototype (Cycle 0)</title>
+  <title>Booking • Prototype (Cycle 0)</title>
   <style>
     :root{
       --bg:#0f172a; /* slate-900 */
@@ -52,7 +52,7 @@
     <header>
       <div class="logo" aria-hidden="true"></div>
       <div>
-        <h1>EasyBook — Online Booking (Prototype)</h1>
+        <h1>Booking — Online Booking (Prototype)</h1>
         <div class="muted">Cycle 0 mock-up • Not real data • Keyboard-friendly</div>
       </div>
     </header>
@@ -71,8 +71,8 @@
           <label for="service">What are you booking?</label>
           <select id="service" required>
             <option value="">Choose…</option>
-            <option value="concert">Concert: City Chamber Night</option>
-            <option value="clinic">Clinic: Wellness Check</option>
+            <option value="concert">Concert</option>
+            <option value="ballet">Ballet</option>
             <option value="tour">Museum Tour</option>
           </select>
           <div id="service-msg" class="notice">Please choose an option.</div>
@@ -203,7 +203,7 @@
   const state = {
     service:"", date:"", time:"", qty:1, tier:"std", name:"", email:"",
   };
-  const basePrice = { concert: 35, clinic: 25, tour: 18 };
+  const basePrice = { concert: 35, ballet: 25, tour: 18 };
   const tierAdd = { std: 0, prem: 15, vip: 40 };
 
   const el = id => document.getElementById(id);
