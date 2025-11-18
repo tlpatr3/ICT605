@@ -1,0 +1,245 @@
+:root {
+  --bg: #f5f5f7;
+  --surface: #ffffff;
+  --border: #e2e2e7;
+  --text-main: #111111;
+  --text-muted: #666666;
+  --accent: #2563eb;
+  --accent-soft: #eff6ff;
+  --highlight: #fef3c7;
+}
+
+/* GLOBAL RESET */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Helvetica Neue", Arial, sans-serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================================ */
+/* TOP NAV (HOMEPAGE) */
+/* ================================ */
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.75rem;
+  height: 64px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.nav-link {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.nav-link.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.profile-badge {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.profile-badge .dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #e11d48;
+  display: none;
+}
+
+.profile-badge.has-notifications .dot {
+  display: block;
+}
+
+/* ================================ */
+/* VIEWS */
+/* ================================ */
+
+.view {
+  display: none;
+  flex: 1;
+}
+
+.view.active {
+  display: flex;
+}
+
+/* ================================ */
+/* DASHBOARD */
+/* ================================ */
+
+#dashboardView {
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.5rem;
+}
+
+.home-inner {
+  max-width: 900px;
+  width: 100%;
+  margin-top: 2rem;
+  background: var(--surface);
+  border-radius: 0.9rem;
+  border: 1px solid var(--border);
+  padding: 2rem 2.25rem;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
+}
+
+.home-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.home-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 1.75rem;
+}
+
+.course-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.course-card {
+  border-radius: 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.course-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.course-meta {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.78rem;
+  margin-top: 0.35rem;
+}
+
+.primary-btn {
+  margin-top: 1.4rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+/* ================================ */
+/* READING VIEW */
+/* ================================ */
+
+#readingView {
+  position: relative;
+  padding: 0;
+}
+
+.reading-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.reading-shell.menu-open .slide-menu {
+  transform: translateX(0);
+}
+
+.reading-shell.menu-open .reading-backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ================================ */
+/* SLIDE-OUT MENU */
+/* ================================ */
+
+.slide-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  box-shadow: 2px 0 14px rgba(15, 23, 42, 0.1);
+  padding: 1.5rem 1rem;
+  transform: translateX(-100%);
+  transition: transform 0.22s ease;
+  z-index: 15;
+}
+
+.s
