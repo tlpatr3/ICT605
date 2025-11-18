@@ -4,15 +4,13 @@
   <meta charset="UTF-8" />
   <title>Perusall Minimal Prototype</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <!-- Link to CSS -->
   <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
 <div class="app">
 
-  <!-- Global nav -->
+  <!-- Global nav (Dashboard only) -->
   <header class="top-nav" id="globalNav">
     <div class="logo">Perusall Minimal</div>
     <nav class="nav-links">
@@ -29,12 +27,12 @@
     </div>
   </header>
 
-  <!-- Dashboard View -->
+  <!-- DASHBOARD VIEW -->
   <section class="view active" id="dashboardView">
     <div class="home-inner">
       <div class="home-title">Welcome back, Tiffany</div>
       <div class="home-subtitle">
-        Review your courses and jump straight into this week’s reading.
+        Review your courses and jump straight into this week’s reading and annotations.
       </div>
 
       <div class="course-list">
@@ -54,96 +52,124 @@
         </article>
       </div>
 
-      <button class="primary-btn" id="openReadingBtn">Open sample reading</button>
+      <button class="primary-btn" id="openReadingBtn">
+        Open sample reading
+      </button>
     </div>
   </section>
 
-  <!-- Reading View -->
+  <!-- READING VIEW (FULL FOCUS MODE) -->
   <section class="view" id="readingView">
     <div class="reading-shell" id="readingShell">
 
-      <!-- Slide-out menu -->
-      <aside class="slide-menu">
-        <h2>Navigation</h2>
-        <ul>
-          <li><button class="active" data-nav="courses">Courses</button></li>
-          <li><button data-nav="assignments">Assignments</button></li>
-          <li><button data-nav="annotations">My Annotations</button></li>
-          <li><button data-nav="profile">Profile</button></li>
-        </ul>
-      </aside>
-
-      <div class="reading-backdrop" id="readingBackdrop"></div>
-
-      <!-- Reading Toolbar -->
+      <!-- Focus-mode toolbar centered above reading -->
       <header class="reading-toolbar">
-        <div class="toolbar-left">
-          <button class="hamburger" id="hamburgerBtn">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-          <div class="doc-title">Algorithmic Injustice and Social Systems</div>
-        </div>
+        <div class="toolbar-inner">
+          <div class="toolbar-row top">
+            <button class="back-link" id="backToDashboardBtn">← Courses</button>
+            <div class="toolbar-profile" id="readingProfile">
+              TP
+              <span class="dot"></span>
+            </div>
+          </div>
 
-        <div class="toolbar-center">
-          <button class="toolbar-btn" id="zoomOutBtn">−</button>
-          <span id="zoomLevelLabel">100%</span>
-          <button class="toolbar-btn" id="zoomInBtn">+</button>
-          <button class="toolbar-btn" id="addAnnotationBtn" disabled>✎</button>
-        </div>
+          <div class="toolbar-row middle">
+            <div class="doc-title">Algorithmic Injustice and Social Systems</div>
+          </div>
 
-        <div class="toolbar-right">
-          <div class="toolbar-profile" id="readingProfile">
-            TP
-            <span class="dot"></span>
+          <div class="toolbar-row bottom">
+            <div class="toolbar-controls">
+              <button class="toolbar-btn" id="zoomOutBtn" aria-label="Zoom out">−</button>
+              <span id="zoomLevelLabel">100%</span>
+              <button class="toolbar-btn" id="zoomInBtn" aria-label="Zoom in">+</button>
+
+              <div class="toolbar-spacer"></div>
+
+              <button class="toolbar-btn" id="addAnnotationBtn" disabled title="Add annotation from selection">
+                ✎
+              </button>
+
+              <button class="toolbar-btn" id="toggleDrawerBtn" title="Show annotations">
+                💬
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
-      <!-- Reading Layout -->
-      <div class="layout-reading">
+      <!-- Main reading area (centered) -->
+      <main class="reading-main">
         <article class="reading-pane" id="readingPane">
-          <h2>Algorithmic Injustice and Social Systems</h2>
-          <div class="reading-meta">
-            Week 6 · 12 annotations · Last updated today at 3:42 PM
+          <div class="reading-meta-bar">
+            <span class="reading-meta">Week 6 · 12 annotations · Last updated today at 3:42 PM</span>
           </div>
+
+          <h1 class="reading-title">Algorithmic Injustice and Social Systems</h1>
+
           <div class="reading-body" id="readingContent">
             <p>
               In many contemporary systems, algorithms are deployed as seemingly neutral tools
-              for ranking, sorting, and classifying people...
+              for ranking, sorting, and classifying people. Yet these systems are built on
+              historical data that often reflects existing patterns of inequality. When such
+              data is treated as objective fact, the resulting models can quietly reinforce
+              the very injustices they were supposed to address.
             </p>
             <p>
-              Consider an algorithm that predicts which neighborhoods are most
-              likely to generate calls for police service...
+              Consider an algorithm that predicts which neighborhoods are most likely to
+              generate calls for police service. If the model is trained on past call data
+              without context, it will almost certainly mark the same over-policed
+              communities as high-risk in the future. This does not necessarily mean that
+              these communities are more dangerous; it may simply reflect that they have
+              been watched more closely. The algorithm then directs additional attention
+              back to those neighborhoods, deepening the cycle.
             </p>
             <p>
-              A more just approach to design would treat social context as a core
-              requirement rather than an afterthought...
+              A more just approach to design would treat social context as a core requirement
+              rather than an afterthought. Designers, researchers, and communities can work
+              together to decide which outcomes matter, what counts as evidence, and how
+              systems should respond when the data reflects harm. Without that work,
+              algorithmic systems risk becoming polished interfaces for very old forms of
+              discrimination.
             </p>
           </div>
         </article>
+      </main>
 
-        <!-- Annotations Sidebar -->
-        <aside class="annotations-pane">
-          <div class="annotations-header">
-            <h3>Annotations</h3>
-            <span class="badge"><span id="annotationCount">0</span> total</span>
+      <!-- Annotations drawer (hidden in focus mode) -->
+      <aside class="annotations-drawer" id="annotationsDrawer" aria-label="Annotations">
+        <header class="drawer-header">
+          <h2>Annotations</h2>
+          <button class="drawer-close" id="closeDrawerBtn">×</button>
+        </header>
+
+        <div class="drawer-body">
+          <div class="drawer-summary">
+            <span class="badge">
+              <span id="annotationCount">0</span> total
+            </span>
+            <span class="hint">Select text in the reading, then click ✎ to add a note.</span>
           </div>
+
           <div id="annotationsList">
-            <div class="annotation-empty">Select text in the reading to annotate.</div>
+            <div class="annotation-empty">
+              No annotations yet. Use focus mode to read; open this panel when you’re ready to review notes.
+            </div>
           </div>
-        </aside>
+        </div>
+      </aside>
 
-      </div>
+      <!-- Backdrop behind drawer -->
+      <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
     </div>
   </section>
 </div>
 
 <!-- Annotation Modal -->
 <div class="modal-backdrop" id="annotationModal">
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true">
     <h3>New annotation</h3>
+
     <div class="modal-label">Highlighted text</div>
     <div class="modal-snippet" id="modalSnippet"></div>
 
@@ -157,7 +183,6 @@
   </div>
 </div>
 
-<!-- Javascript -->
 <script src="script.js"></script>
 </body>
 </html>

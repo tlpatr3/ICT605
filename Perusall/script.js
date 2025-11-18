@@ -5,48 +5,52 @@ const dashboardView = document.getElementById("dashboardView");
 const readingView = document.getElementById("readingView");
 const globalNav = document.getElementById("globalNav");
 const openReadingBtn = document.getElementById("openReadingBtn");
+const backToDashboardBtn = document.getElementById("backToDashboardBtn");
 
 openReadingBtn.addEventListener("click", () => {
   dashboardView.classList.remove("active");
   readingView.classList.add("active");
-  globalNav.style.display = "none"; // hide homepage nav in reading mode
+  globalNav.style.display = "none";
+  window.getSelection().removeAllRanges();
+});
+
+backToDashboardBtn.addEventListener("click", () => {
+  readingView.classList.remove("active");
+  dashboardView.classList.add("active");
+  globalNav.style.display = "flex";
+  closeDrawer();
 });
 
 // ================================
-// SLIDE-OUT MENU + HAMBURGER
+// ANNOTATIONS DRAWER (FOCUS MODE TOGGLE)
 // ================================
 const readingShell = document.getElementById("readingShell");
-const hamburgerBtn = document.getElementById("hamburgerBtn");
-const readingBackdrop = document.getElementById("readingBackdrop");
+const annotationsDrawer = document.getElementById("annotationsDrawer");
+const drawerBackdrop = document.getElementById("drawerBackdrop");
+const toggleDrawerBtn = document.getElementById("toggleDrawerBtn");
+const closeDrawerBtn = document.getElementById("closeDrawerBtn");
 
-function toggleMenu(open) {
-  const shouldOpen =
-    typeof open === "boolean" ? open : !readingShell.classList.contains("menu-open");
-  if (shouldOpen) {
-    readingShell.classList.add("menu-open");
-  } else {
-    readingShell.classList.remove("menu-open");
-  }
+function openDrawer() {
+  readingShell.classList.add("drawer-open");
 }
 
-hamburgerBtn.addEventListener("click", () => toggleMenu());
-readingBackdrop.addEventListener("click", () => toggleMenu(false));
+function closeDrawer() {
+  readingShell.classList.remove("drawer-open");
+}
 
-document.querySelectorAll(".slide-menu button[data-nav]").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const dest = btn.getAttribute("data-nav");
-    if (dest === "courses") {
-      // Simulate going back to dashboard
-      readingView.classList.remove("active");
-      dashboardView.classList.add("active");
-      globalNav.style.display = "flex";
-    }
-    toggleMenu(false);
-  });
+toggleDrawerBtn.addEventListener("click", () => {
+  if (readingShell.classList.contains("drawer-open")) {
+    closeDrawer();
+  } else {
+    openDrawer();
+  }
 });
 
+closeDrawerBtn.addEventListener("click", closeDrawer);
+drawerBackdrop.addEventListener("click", closeDrawer);
+
 // ================================
-// ZOOM CONTROLS
+// ZOOM CONTROLS (FONT-BASED TO KEEP SELECTION WORKING)
 // ================================
 const readingPane = document.getElementById("readingPane");
 const zoomOutBtn = document.getElementById("zoomOutBtn");
@@ -54,11 +58,12 @@ const zoomInBtn = document.getElementById("zoomInBtn");
 const zoomLevelLabel = document.getElementById("zoomLevelLabel");
 
 let zoomLevel = 100;
+const baseFontSize = 16; // implicit baseline for 100%
 
 function applyZoom() {
   const scale = zoomLevel / 100;
-  readingPane.style.transformOrigin = "top left";
-  readingPane.style.transform = "scale(" + scale + ")";
+  const newSize = baseFontSize * scale;
+  readingPane.style.fontSize = newSize + "px";
   zoomLevelLabel.textContent = zoomLevel + "%";
   zoomOutBtn.disabled = zoomLevel <= 80;
   zoomInBtn.disabled = zoomLevel >= 140;
@@ -106,7 +111,7 @@ function clearSelectionState() {
   addAnnotationBtn.disabled = true;
 }
 
-// Enable "Add annotation" only when there's selected text in the reading pane
+// Selection tracking: only in reading view & inside readingContent
 document.addEventListener("selectionchange", () => {
   if (!readingView.classList.contains("active")) return;
 
@@ -117,8 +122,12 @@ document.addEventListener("selectionchange", () => {
   }
 
   const range = sel.getRangeAt(0);
-  const container = range.commonAncestorContainer;
+  let container = range.commonAncestorContainer;
   const selectedText = sel.toString().trim();
+
+  if (container.nodeType === Node.TEXT_NODE) {
+    container = container.parentNode;
+  }
 
   const isInsideReading = readingContent.contains(container);
 
@@ -144,6 +153,7 @@ function closeModal() {
   modal.classList.remove("active");
 }
 
+// ✎ button opens modal
 addAnnotationBtn.addEventListener("click", () => {
   if (!currentRange || !currentSelectionText) return;
   openModal();
@@ -153,7 +163,7 @@ cancelAnnotationBtn.addEventListener("click", () => {
   closeModal();
 });
 
-// Save annotation
+// Save annotation → highlight + drawer list + notification dots
 saveAnnotationBtn.addEventListener("click", () => {
   const note = modalTextarea.value.trim();
   if (!note) {
@@ -161,7 +171,7 @@ saveAnnotationBtn.addEventListener("click", () => {
     return;
   }
 
-  // Wrap the selected text in a span.highlight
+  // Highlight selection
   const span = document.createElement("span");
   span.className = "highlight";
   span.setAttribute("data-annotation-id", String(annotations.length));
@@ -170,7 +180,6 @@ saveAnnotationBtn.addEventListener("click", () => {
     currentRange.surroundContents(span);
   } catch (e) {
     console.warn("Could not highlight selection:", e);
-    // If selection is messy (spans multiple elements), we still save the annotation
   }
 
   const timestamp = new Date().toLocaleTimeString([], {
@@ -192,19 +201,19 @@ saveAnnotationBtn.addEventListener("click", () => {
   clearSelectionState();
   closeModal();
 
-  // Show notification dots
+  // Show notification dots on both profiles
   readingProfile.classList.add("has-notifications");
   homeProfile.classList.add("has-notifications");
 });
 
-// Render annotations in the sidebar
+// Render annotations into drawer
 function renderAnnotations() {
   annotationsList.innerHTML = "";
   annotationCount.textContent = annotations.length;
 
   if (annotations.length === 0) {
     annotationsList.innerHTML =
-      '<div class="annotation-empty">No annotations yet. Select text in the reading to add one.</div>';
+      '<div class="annotation-empty">No annotations yet. Use focus mode to read; open this panel when you’re ready to review notes.</div>';
     return;
   }
 
@@ -269,7 +278,7 @@ function renderAnnotations() {
     replyBlock.appendChild(replyTextarea);
     replyBlock.appendChild(replyActions);
 
-    // Reply interactions
+    // Reply button toggles reply box
     replyBtn.addEventListener("click", () => {
       replyBlock.style.display =
         replyBlock.style.display === "none" ? "flex" : "none";
@@ -315,3 +324,4 @@ function renderAnnotations() {
     annotationsList.appendChild(card);
   });
 }
+
